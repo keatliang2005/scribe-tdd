@@ -63,12 +63,15 @@ trait ScribeTddSetup
 
     private function shouldSkipExample(): bool
     {
-        return !is_null($this->getAnnotation($this->name(false), 'scribeSkip'));
+        // phpunit 12 no more annotation
+        return !is_null(null);
+        //return !is_null($this->getAnnotation($this->name(false), 'scribeSkip'));
     }
 
     private function guessResponseDescription($testMethod)
     {
-        $description = $this->getAnnotation($testMethod, 'scribeDescription')[0] ?? null;
+        $description = null;
+        //$description = $this->getAnnotation($testMethod, 'scribeDescription')[0] ?? null;
 
         if ($description) {
             return $description;
@@ -81,38 +84,38 @@ trait ScribeTddSetup
         return trim(str_replace('_', ' ', Str::snake($testMethod)));
     }
 
-    private function getAnnotation($testMethod, $name): ?array
-    {
-        $annotations = self::parseTestMethodAnnotations(
-            static::class,
-            $testMethod
-        );
+//    private function getAnnotation($testMethod, $name): ?array
+//    {
+//        $annotations = self::parseTestMethodAnnotations(
+//            static::class,
+//            $testMethod
+//        );
+//
+//        return $annotations['method'][$name] ?? null;
+//    }
 
-        return $annotations['method'][$name] ?? null;
-    }
-
-    /**
-     * @psalm-param class-string $className
-     */
-    public static function parseTestMethodAnnotations(string $className, ?string $methodName = ''): array
-    {
-
-        $registry = \PHPUnit\Metadata\Annotation\Parser\Registry::getInstance();
-
-        if ($methodName !== null) {
-            try {
-                return [
-                    'method' => $registry->forMethod($className, $methodName)->symbolAnnotations(),
-                    'class'  => $registry->forClassName($className)->symbolAnnotations(),
-                ];
-            } catch (Exception $methodNotFound) {
-                // ignored
-            }
-        }
-
-        return [
-            'method' => null,
-            'class'  => $registry->forClassName($className)->symbolAnnotations(),
-        ];
-    }
+//    /**
+//     * @psalm-param class-string $className
+//     */
+//    public static function parseTestMethodAnnotations(string $className, ?string $methodName = ''): array
+//    {
+//        $test = \PHPUnit\Metadata\Parser\Registry::parser();
+//        $registry = \PHPUnit\Metadata\Annotation\Parser\Registry::getInstance();
+//
+//        if ($methodName !== null) {
+//            try {
+//                return [
+//                    'method' => $registry->forMethod($className, $methodName)->symbolAnnotations(),
+//                    'class'  => $registry->forClassName($className)->symbolAnnotations(),
+//                ];
+//            } catch (Exception $methodNotFound) {
+//                // ignored
+//            }
+//        }
+//
+//        return [
+//            'method' => null,
+//            'class'  => $registry->forClassName($className)->symbolAnnotations(),
+//        ];
+//    }
 }
